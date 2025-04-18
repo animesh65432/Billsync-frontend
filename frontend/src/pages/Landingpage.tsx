@@ -7,7 +7,7 @@ export default function LandingPage() {
             <header className="w-full max-w-7xl px-6 py-4 flex justify-between items-center">
                 <div className="flex items-center gap-2">
                     <img src="/icon.png" className="h-8 w-8 rounded-md" alt="Logo" />
-                    <span className="text-xl font-bold uppercase tracking-wide">BillSync</span>
+                    <span className="text-xl font-bold uppercase tracking-wide">DueTrack</span>
                 </div>
                 <Button className="bg-white text-black hover:bg-slate-200 transition">
                     <span>Get Started</span>
