@@ -1,5 +1,3 @@
-
-
 export default function Header() {
     return (
         <div className='w-[85vw] bg-black h-[8vh] mt-5 rounded-2xl text-white flex justify-evenly items-center uppercase font-bold '>

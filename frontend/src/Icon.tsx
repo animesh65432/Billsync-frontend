@@ -25,6 +25,10 @@ import {
     User,
     X,
     ArrowUpRight,
+    LayoutDashboard,
+    LogOut,
+    Ban,
+    BookCheck,
     type Icon as LucideIcon,
 } from "lucide-react"
 
@@ -72,5 +76,9 @@ export const Icons = {
     ),
     twitter: Twitter,
     check: Check,
-    ArrowUpRight: ArrowUpRight
+    ArrowUpRight: ArrowUpRight,
+    Dashboard: LayoutDashboard,
+    Logout: LogOut,
+    right: BookCheck,
+    wrong: Ban
 }
