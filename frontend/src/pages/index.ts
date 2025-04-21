@@ -1,5 +1,5 @@
 import Landingpage from "./Landingpage";
 import Dashborad from "./Dashborad";
-
-
-export { Landingpage, Dashborad }
+import Singup from "./Singup";
+import Singin from "./Singin";
+export { Landingpage, Dashborad, Singup, Singin }

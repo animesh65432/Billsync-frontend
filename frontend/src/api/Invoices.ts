@@ -1,43 +1,50 @@
 import { Call } from "@/services/call"
 
-export const GetInvoices = () => Call({
-    path: "",
-    request: {},
+export const GetInvoices = (auth_token: string) => Call({
+    path: "/Invoices/GetInvoices",
     method: "GET",
-    headers: {}
+    headers: {
+        authorization: auth_token
+    }
+})
+export const GetInvoice = (auth_token: string, id: number) => Call({
+    path: `/Invoices/GetInvoice?id=${id}`,
+    method: "GET",
+    headers: {
+        authorization: auth_token
+    }
 })
 
-export const GetInvoice = () => Call({
-    path: "",
-    request: {},
-    method: "GET",
-    headers: {}
-})
-
-export const create = () => Call({
-    path: "",
-    request: {},
+export const create = (clientName: string, amount: number, dueDate: Date, Mail: string, auth_token: string) => Call({
+    path: "/Invoices/create",
+    request: { clientName, amount, dueDate, Mail },
     method: "POST",
-    headers: {}
+    headers: {
+        authorization: auth_token
+    }
 })
 
-export const update = () => Call({
-    path: "",
-    request: {},
+export const update = (id: number, clientName: string, amount: number, dueDate: Date, Mail: string, auth_token: string) => Call({
+    path: `/Invoices/GetInvoice?id=${id}`,
+    request: { clientName, amount, dueDate, Mail },
     method: "PUT",
-    headers: {}
+    headers: {
+        authorization: auth_token
+    }
 })
 
-export const Delete = () => Call({
-    path: "",
-    request: {},
+export const Delete = (id: number, auth_token: string) => Call({
+    path: `/Invoices/delete?id=${id}`,
     method: "DELETE",
-    headers: {}
+    headers: {
+        authorization: auth_token
+    }
 })
 
-export const markaspaid = () => Call({
-    path: "",
-    request: {},
+export const markaspaid = (id: number, auth_token: string) => Call({
+    path: `/Invoices/markaspaid${id}`,
     method: "PUT",
-    headers: {}
+    headers: {
+        authorization: auth_token
+    }
 })
