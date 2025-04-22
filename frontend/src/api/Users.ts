@@ -12,7 +12,7 @@ export const usesinguptheuser = (name: string, email: string, Password: string) 
 
 })
 
-export const uselogintheuser = (email: string, Password?: string) => Call({
+export const uselogintheuser = (email: string, Password: string) => Call({
     path: "/users/login",
     method: "POST",
     request: {
