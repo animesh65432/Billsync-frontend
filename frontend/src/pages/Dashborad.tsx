@@ -2,6 +2,8 @@ import { useEffect, useState } from "react"
 import { Sidebar, Dashboard, LoadinSpinner, } from "@/components"
 import { GetInvoices } from "@/api/Invoices"
 import { InvoicesTypes } from "@/types/index"
+import { useStore } from "@/store"
+import { Sheet, SheetTrigger } from "@/components/ui/sheet"
 export const dummyInvoices: InvoicesTypes[] = [
     {
         clientName: "Alice Johnson",
@@ -47,11 +49,13 @@ export const dummyInvoices: InvoicesTypes[] = [
 
 export default function Dashborad() {
     const [loading, setloading] = useState<boolean>(false)
+    const { setInvoiceStore } = useStore()
+
     async function init() {
         setloading(true)
         try {
-            const Invoices = await GetInvoices("eyJhbGciOiJIUzI1NiJ9.dGVzdEBnbWFpbC5jb20.WW8_MBkcdmvtxP3yUkzbJa-rnsKeBX3IM0ncMdX1m_I")
-            console.log(Invoices)
+            const Invoices = await GetInvoices("eyJhbGciOiJIUzI1NiJ9.dGVzdEBnbWFpbC5jb20.WW8_MBkcdmvtxP3yUkzbJa-rnsKeBX3IM0ncMdX1m_I") as InvoicesTypes[]
+            setInvoiceStore(Invoices)
         } catch (error) {
             console.log(error)
         }
@@ -63,12 +67,12 @@ export default function Dashborad() {
         init()
     }, [])
     return (
-        <div className="grid grid-cols-12">
-            <div className="col-span-2 border-r border-black">
+        <div className="grid grid-cols-12  h-[100vh]">
+            <div className="hidden xl:block xl:col-span-1 border-r border-black h-full">
                 <Sidebar />
-                <h1>huygyug</h1>
             </div>
-            <div className="col-span-10">
+
+            <div className="col-span-12 xl:col-span-11  h-full">
                 <LoadinSpinner loading={loading} >
                     <Dashboard />
                 </LoadinSpinner>
