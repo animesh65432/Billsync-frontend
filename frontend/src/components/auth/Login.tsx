@@ -4,6 +4,11 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { Button } from "@/components/ui/button"
 import { Link } from "react-router-dom"
+import { useNavigate } from "react-router-dom"
+import { uselogintheuser } from "@/api/Users"
+import { useState } from "react";
+import { Icons } from "@/Icon"
+import { toast } from "react-toastify"
 
 type LoginTypes = z.infer<typeof LoginSchema>;
 
@@ -14,10 +19,26 @@ export default function Login() {
         formState: { errors },
     } = useForm<LoginTypes>({
         resolver: zodResolver(LoginSchema),
+        defaultValues: {
+            email: "test@gmail.com",
+            Password: "testpassword",
+        },
     });
+    const [loading, setloading] = useState<Boolean>(false)
+    const navigate = useNavigate()
 
-    const onSubmit = (data: LoginTypes) => {
-        console.log("Form Data:", data);
+    const onSubmit = async (data: LoginTypes) => {
+        setloading(true)
+        try {
+            const response = await uselogintheuser(data.email, data.Password) as { token: string, message: string };
+            navigate("/Dashborad")
+            toast.success(`${response.message}`)
+        } catch (error) {
+            console.log(error)
+        }
+        finally {
+            setloading(false)
+        }
     };
 
     return (
@@ -43,7 +64,7 @@ export default function Login() {
                         <input
                             {...register("email")}
                             className="w-full p-2 rounded bg-gray-800 border border-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                            placeholder="john@example.com"
+
                         />
                         {errors.email && <p className="text-red-500 text-sm mt-1">{errors.email.message}</p>}
                     </div>
@@ -54,12 +75,12 @@ export default function Login() {
                             type="password"
                             {...register("Password")}
                             className="w-full p-2 rounded bg-gray-800 border border-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                            placeholder="********"
+
                         />
                         {errors.Password && <p className="text-red-500 text-sm mt-1">{errors.Password.message}</p>}
                     </div>
                     <div className=" w-full  justify-center flex flex-col items-center gap-4">
-                        <Button className="bg-white text-black hover:bg-amber-50 w-[30%]">Continue</Button>
+                        <Button className="bg-white text-black hover:bg-amber-50 w-[30%]">{loading ? <Icons.spinner className="animate-spin" /> : "Continue"}</Button>
                         <div>Don't have an account?<Link to="/singup"><span className="underline"> Signup</span></Link></div>
                     </div>
                 </form>
