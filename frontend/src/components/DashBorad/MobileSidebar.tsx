@@ -1,4 +1,4 @@
-import { Home, FileText, Mail, Settings, LogOut, Plus, Sun, Moon } from "lucide-react"
+import { Home, FileText, Mail, Settings, LogOut, Plus } from "lucide-react"
 
 
 export default function MobileSidebar() {

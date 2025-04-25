@@ -3,7 +3,6 @@ import { Sidebar, Dashboard, LoadinSpinner, } from "@/components"
 import { GetInvoices } from "@/api/Invoices"
 import { InvoicesTypes } from "@/types/index"
 import { useStore } from "@/store"
-import { Sheet, SheetTrigger } from "@/components/ui/sheet"
 export const dummyInvoices: InvoicesTypes[] = [
     {
         clientName: "Alice Johnson",
