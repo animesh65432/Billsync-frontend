@@ -1,6 +1,6 @@
 import { ColumnDef } from "@tanstack/react-table"
 import { InvoicesTypes } from "@/types"
-import { Icons, } from "@/Icon"
+import { Icons } from "@/Icon"
 import {
     DropdownMenu,
     DropdownMenuContent,
@@ -10,8 +10,6 @@ import {
 } from "@/components/ui/dropdown-menu"
 import { MoreHorizontal, ArrowUpDown } from "lucide-react"
 import { Button } from "@/components/ui/button"
-
-
 const InvoicesActions = () => {
 
     return (
@@ -110,7 +108,19 @@ export const Invoicescolumns: ColumnDef<InvoicesTypes>[] = [
     },
     {
         accessorKey: "dueDate",
-        header: "Due Date"
+        cell: ({ row }) => {
+            const date = new Date(row.getValue("dueDate"));
+            const indiaDate = date.toLocaleDateString("en-IN", {
+                timeZone: "Asia/Kolkata",
+                day: "numeric",
+                month: "short",
+                year: "numeric",
+            });
+            return <div>{indiaDate}</div>;
+        },
+
+
+
     }, {
         accessorKey: "reminderSent",
         cell: ({ row }) => {

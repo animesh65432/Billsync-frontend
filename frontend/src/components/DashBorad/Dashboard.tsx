@@ -1,22 +1,16 @@
 import { InvoicesTable, Invoicescolumns } from "@/components"
-import { dummyInvoices } from "@/pages/Dashborad"
+import { dummyInvoices } from "@/lib/utils"
 import InvoiceChart from "./Invoices/InvoiceChart"
 import { MenuIcon } from "lucide-react"
 import { Sheet, SheetTrigger, SheetContent } from "@/components/ui/sheet"
+import { Input } from "@/components/ui/input"
 import MobileSidebar from "./MobileSidebar"
+import { useState } from "react"
 export default function Dashboard() {
-    const PendingAmount = dummyInvoices.reduce(
-        (acc, cur) => cur.status === "PENDING" ? acc + cur.amount : acc,
-        0
-    );
-    const SucesseAmount = dummyInvoices.reduce(
-        (acc, cur) => cur.status === "SUCCEED" ? acc + cur.amount : acc,
-        0
-    );
-
+    const [globalFilter, setGlobalFilter] = useState<string>("")
     return (
-        <div className="p-4  flex flex-col w-full">
-            <div className="h-[40vh] w-full flex justify-around gap-8">
+        <div className="p-4  flex flex-col w-full h-[100vh]">
+            <div className="h-[40vh] w-full flex xl:justify-between justify-around gap-8">
                 <div className="xl:hidden block  font-bold">
                     <Sheet>
                         <SheetTrigger>
@@ -27,30 +21,20 @@ export default function Dashboard() {
                         </SheetContent>
                     </Sheet>
                 </div>
-                <div className="flex flex-col w-[50%] gap-4 xl:text-3xl sm:text-xl text-sm font-bold">
-
-                    <ul className="flex gap-6">
-                        <span >TOTAL INVOICES</span>
-                        <span >
-                            {dummyInvoices.length.toLocaleString()}</span>
-                    </ul>
-                    <ul className="flex gap-6">
-                        <span >PENDING AMOUNT</span>
-                        <span >
-                            {PendingAmount}</span>
-                    </ul>
-                    <ul className="flex gap-6">
-                        <span >SUCESSED AMOUNT</span>
-                        <span >
-                            {SucesseAmount}</span>
-                    </ul>
+                <div className="xl:mt-20">
+                    <Input
+                        placeholder="Search all Invoices ..."
+                        value={globalFilter ?? ""}
+                        onChange={(event) => setGlobalFilter(event.target.value)}
+                        className="max-w-sm"
+                    />
 
                 </div>
                 <InvoiceChart />
             </div>
-            <div className="h-[40vh]">
-                <InvoicesTable data={dummyInvoices} columns={Invoicescolumns} />
+            <div className="h-[60vh]">
+                <InvoicesTable data={dummyInvoices} columns={Invoicescolumns} globalFilter={globalFilter} setGlobalFilter={setGlobalFilter} />
             </div>
-        </div>
+        </div >
     )
 }
