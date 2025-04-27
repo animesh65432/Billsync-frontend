@@ -1,8 +1,14 @@
 import { Landingpage, Dashborad, Singup, Singin, InvoiceFrom } from "@/pages"
 import { BrowserRouter, Route, Routes } from "react-router-dom"
 import { ToastContainer } from "react-toastify"
+import Cookies from 'js-cookie';
+import { useEffect } from "react"
 import { ThemeColorProvider, MainLayout } from "@/components"
 function App() {
+  useEffect(() => {
+    const token = Cookies.get('token');
+    console.log('Token cookie:', token);
+  }, []);
   return (
     <ThemeColorProvider>
       <BrowserRouter>

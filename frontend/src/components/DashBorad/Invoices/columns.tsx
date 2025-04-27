@@ -1,77 +1,31 @@
 import { ColumnDef } from "@tanstack/react-table"
-import { InvoicesTypes } from "@/types"
-import { Icons } from "@/Icon"
+import { MoreHorizontal, ArrowUpDown } from "lucide-react"
 import {
     DropdownMenu,
     DropdownMenuContent,
     DropdownMenuItem,
-    DropdownMenuSeparator,
     DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
-import { MoreHorizontal, ArrowUpDown } from "lucide-react"
-import { Button } from "@/components/ui/button"
-const InvoicesActions = () => {
+import { InvoicesTypes } from "@/types"
+import { Icons } from "@/Icon"
+import { useStore } from "@/store"
 
-    return (
-        <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-                <Button variant="ghost" className="h-8 w-8 p-0">
-                    <span className="sr-only">Open menu</span>
-                    <MoreHorizontal className="h-4 w-4" />
-                </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent align="end">
-                <DropdownMenuItem >
-                    <Button
-                        variant="ghost"
-                        className="text-center"
-
-                    >
-                        View
-                    </Button>
-                </DropdownMenuItem>
-                <DropdownMenuSeparator />
-                <DropdownMenuItem >
-                    <Button
-                        variant="ghost"
-                        className="text-center"
-
-                    >
-                        Send Reminder
-                    </Button>
-                </DropdownMenuItem>
-                <DropdownMenuSeparator />
-                <DropdownMenuItem >
-                    <Button
-                        variant="ghost"
-                        className="text-center"
-
-                    >
-                        Edit
-                    </Button>
-                </DropdownMenuItem>
-                <DropdownMenuSeparator />
-                <DropdownMenuItem >
-                    <Button
-                        variant="ghost"
-                        className="text-center"
-
-                    >
-                        Delete
-                    </Button>
-                </DropdownMenuItem>
-            </DropdownMenuContent>
-        </DropdownMenu>)
-}
 
 export const Invoicescolumns: ColumnDef<InvoicesTypes>[] = [
     {
         accessorKey: "clientName",
-        header: "Client Name",
+        header: () => {
+            const { color } = useStore()
+            return <p className={`${color ? "text-white" : "text-black"} up`}>ClientName</p>
+        }
     },
     {
         accessorKey: "amount",
-        header: () => <div className="text-right">Amount</div>,
+        header: () => {
+            const { color } = useStore()
+            return <p className={`${color ? "text-white" : "text-black"} uppercase`}>amount</p>
+
+        },
         cell: ({ row }) => {
             const amount = parseFloat(row.getValue("amount"))
             const formatted = new Intl.NumberFormat("en-US", {
@@ -79,15 +33,16 @@ export const Invoicescolumns: ColumnDef<InvoicesTypes>[] = [
                 currency: "INR",
             }).format(amount)
 
-            return <div className="text-right font-medium">{formatted}</div>
+            return <div >{formatted}</div>
         },
     },
     {
         accessorKey: "status",
         header: ({ column }) => {
+            const { color } = useStore()
             return <DropdownMenu>
                 <DropdownMenuTrigger asChild>
-                    <div className="h-8 flex items-center gap-1 -ml-4">
+                    <div className={`${color ? "text-white" : "text-black"} uppercase flex`}>
                         CateGory
                         <ArrowUpDown className="h-4 w-4" />
                     </div>
@@ -108,6 +63,11 @@ export const Invoicescolumns: ColumnDef<InvoicesTypes>[] = [
     },
     {
         accessorKey: "dueDate",
+        header: () => {
+            const { color } = useStore()
+            return <p className={`${color ? "text-white" : "text-black"} uppercase`}>dueDate</p>
+
+        },
         cell: ({ row }) => {
             const date = new Date(row.getValue("dueDate"));
             const indiaDate = date.toLocaleDateString("en-IN", {
@@ -123,13 +83,30 @@ export const Invoicescolumns: ColumnDef<InvoicesTypes>[] = [
 
     }, {
         accessorKey: "reminderSent",
-        cell: ({ row }) => {
-
-            return <div className="text-right font-medium">{row.getValue("reminderSent") ? <Icons.right /> : <Icons.wrong />}</div>
+        header: () => {
+            const { color } = useStore()
+            return <p className={`${color ? "text-white" : "text-black"} uppercase`}>reminderSent</p>
         },
-    },
-    {
+        cell: ({ row }) => {
+            return <div className=" font-medium text-right">{row.getValue("reminderSent") ? <Icons.right /> : <Icons.wrong />}</div>
+        },
+    }, {
         id: "actions",
-        cell: () => <InvoicesActions />
-    },
+        cell: () => {
+            return <DropdownMenu>
+                <DropdownMenuTrigger>
+                    <span className="sr-only">Open menu</span>
+                    <MoreHorizontal className="h-4 w-4" />
+                </DropdownMenuTrigger>
+                <DropdownMenuContent>
+                    <DropdownMenuItem>View</DropdownMenuItem>
+                    <DropdownMenuItem>Send Reminder</DropdownMenuItem>
+                    <DropdownMenuItem>Edit</DropdownMenuItem>
+                    <DropdownMenuItem>Delete</DropdownMenuItem>
+                </DropdownMenuContent>
+            </DropdownMenu>
+
+        }
+    }
+
 ]

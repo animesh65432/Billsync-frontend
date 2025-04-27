@@ -25,7 +25,8 @@ export async function Call<T, ResponseType>({
     const config: AxiosRequestConfig = {
         method,
         url: mergedPath,
-        headers: headers || {}
+        headers: headers || {},
+        withCredentials: true
     };
 
     if (formDataRequest && request instanceof FormData) {
