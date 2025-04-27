@@ -1,24 +1,19 @@
-import { Label, Pie, PieChart } from "recharts"
-import {
-    ChartConfig,
-    ChartContainer,
-    ChartTooltip,
-    ChartTooltipContent,
-} from "@/components/ui/chart"
-import { dummyInvoices } from "@/pages/Dashborad"
-const chartConfig: ChartConfig = {
+import { Label, Pie, PieChart, Tooltip } from "recharts";
+import { dummyInvoices } from "@/lib/utils";
+
+const chartConfig = {
     status: {
         label: "Status",
     },
     PENDING: {
         label: "Pending",
-        color: "hsl(var(--chart-1))",
+        color: "#8884d8",
     },
     SUCCEED: {
         label: "Succeeded",
-        color: "hsl(var(--chart-2))",
+        color: "#82ca9d",
     },
-} as ChartConfig
+};
 
 const InvoiceChart = () => {
     const statusCounts = dummyInvoices.reduce(
@@ -28,6 +23,14 @@ const InvoiceChart = () => {
             return acc;
         },
         { PENDING: 0, SUCCEED: 0 }
+    );
+    const PendingAmount = dummyInvoices.reduce(
+        (acc, cur) => cur.status === "PENDING" ? acc + cur.amount : acc,
+        0
+    );
+    const SucesseAmount = dummyInvoices.reduce(
+        (acc, cur) => cur.status === "SUCCEED" ? acc + cur.amount : acc,
+        0
     );
 
     const chartData = [
@@ -43,57 +46,47 @@ const InvoiceChart = () => {
         },
     ];
 
-
     return (
-        <ChartContainer
-            config={chartConfig}
-            className="mx-auto aspect-square max-h-[250px]"
-        >
-            <PieChart>
-                <ChartTooltip
-                    cursor={false}
-                    content={<ChartTooltipContent hideLabel />}
-                />
-                <Pie
-                    data={chartData}
-                    dataKey="value"
-                    nameKey="name"
-                    innerRadius={60}
-                    strokeWidth={5}
-                >
-                    <Label
-                        content={({ viewBox }) => {
-                            if (viewBox && "cx" in viewBox && "cy" in viewBox) {
-                                return (
-                                    <text
-                                        x={viewBox.cx}
-                                        y={viewBox.cy}
-                                        textAnchor="middle"
-                                        dominantBaseline="middle"
-                                    >
-                                        <tspan
-                                            x={viewBox.cx}
-                                            y={viewBox.cy}
-                                            className="fill-foreground text-3xl font-bold"
-                                        >
-                                            {dummyInvoices.length}
-                                        </tspan>
-                                        <tspan
-                                            x={viewBox.cx}
-                                            y={(viewBox.cy || 0) + 24}
-                                            className="fill-muted-foreground"
-                                        >
-                                            Invoices
-                                        </tspan>
-                                    </text>
-                                );
-                            }
-                            return null;
-                        }}
-                    />
-                </Pie>
-            </PieChart>
-        </ChartContainer>
+        <div className="flex flex-col">
+            <div className="items-center pb-0 flex justify-center font-bold">
+                <p>{dummyInvoices.length.toLocaleString()} Total Invoices</p>
+            </div>
+
+            <div >
+                <PieChart width={190} height={190} >
+                    <Tooltip />
+                    <Pie
+                        data={chartData}
+                        dataKey="value"
+                        nameKey="name"
+                        innerRadius={60}
+                        outerRadius={80}
+                        strokeWidth={5}
+                    >
+                        <Label
+                            content={({ viewBox }) => {
+                                if (viewBox && "cx" in viewBox && "cy" in viewBox) {
+                                    return (
+                                        <></>
+                                    );
+                                }
+                                return null;
+                            }}
+                        />
+                    </Pie>
+                </PieChart>
+            </div>
+
+
+            <div className="flex-col gap-2 text-sm">
+                <div className="flex items-center gap-2 font-medium leading-none">
+                    Pending Amount   ${PendingAmount.toLocaleString()}
+                </div>
+                <div className="font-medium">
+                    Sucessful amount ${SucesseAmount.toLocaleString()}
+                </div>
+            </div>
+        </div>
     );
 };
 
