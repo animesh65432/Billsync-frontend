@@ -1,26 +1,18 @@
 import { useStore } from "@/store"
-import { Home, FileText, Mail, Settings, LogOut, Plus, Sun, Moon } from "lucide-react"
-
+import { Home, LogOut, Plus, Sun, Moon } from "lucide-react"
+import { useNavigate } from "react-router-dom"
 
 export default function DashboardSidebar() {
     const { onchangecolor, color } = useStore()
+    const naviagate = useNavigate()
     return (
         <>
             <div className="flex flex-col p-8  justify-around items-center h-full">
                 <ul>
-                    <Home />
+                    <Home onClick={() => naviagate("/Dashborad")} />
                 </ul>
                 <ul>
-                    <FileText />
-                </ul>
-                <ul>
-                    <Plus />
-                </ul>
-                <ul>
-                    <Mail />
-                </ul>
-                <ul>
-                    <Settings />
+                    <Plus onClick={() => naviagate("/create-invoice")} />
                 </ul>
                 <ul onClick={onchangecolor}>
                     {color ? <Sun /> : <Moon />}
