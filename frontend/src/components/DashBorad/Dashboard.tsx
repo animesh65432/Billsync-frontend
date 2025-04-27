@@ -10,7 +10,7 @@ export default function Dashboard() {
     const [globalFilter, setGlobalFilter] = useState<string>("")
     return (
         <div className="p-4  flex flex-col w-full h-[100vh]">
-            <div className="h-[40vh] w-full flex xl:justify-between justify-around gap-8">
+            <div className=" h-[25vh] sm:h-[40vh] w-full flex xl:justify-between justify-around gap-8">
                 <div className="xl:hidden block  font-bold">
                     <Sheet>
                         <SheetTrigger>
@@ -21,7 +21,7 @@ export default function Dashboard() {
                         </SheetContent>
                     </Sheet>
                 </div>
-                <div className="xl:mt-20">
+                <div className="mt-20  md:w-[50vw] sm:block hidden">
                     <Input
                         placeholder="Search all Invoices ..."
                         value={globalFilter ?? ""}

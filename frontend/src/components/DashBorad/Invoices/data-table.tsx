@@ -9,8 +9,8 @@ import {
     getFacetedRowModel,
     getFacetedUniqueValues,
     FilterFn,
-    Column
 } from "@tanstack/react-table";
+import { Input } from "@/components/ui/input"
 import {
     Table,
     TableBody,
@@ -42,7 +42,7 @@ export default function InvoicesDataTable<TData, TValue>({
     data,
     globalFilter,
     setGlobalFilter,
-    title = "Invoices"
+    // title = "Invoices"
 }: DataTableProps<TData, TValue>) {
     const [pagination, setPagination] = useState({
         pageIndex: 0,
@@ -106,7 +106,15 @@ export default function InvoicesDataTable<TData, TValue>({
 
     return (
         <div className={containerClasses}>
-            {/* Responsive container */}
+            <div className="mt-20  md:w-[50vw] sm:hidden block">
+                <Input
+                    placeholder="Search all Invoices ..."
+                    value={globalFilter ?? ""}
+                    onChange={(event) => setGlobalFilter(event.target.value)}
+                    className="max-w-sm"
+                />
+
+            </div>
             <div className="w-full overflow-auto">
                 <div className={tableBorderClasses}>
                     <Table>
