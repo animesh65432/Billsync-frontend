@@ -1,26 +1,14 @@
 import { InvoicesTable, Invoicescolumns } from "@/components"
 import { dummyInvoices } from "@/lib/utils"
 import InvoiceChart from "./Invoices/InvoiceChart"
-import { MenuIcon } from "lucide-react"
-import { Sheet, SheetTrigger, SheetContent } from "@/components/ui/sheet"
 import { Input } from "@/components/ui/input"
-import MobileSidebar from "./MobileSidebar"
 import { useState } from "react"
 export default function Dashboard() {
     const [globalFilter, setGlobalFilter] = useState<string>("")
     return (
         <div className="p-4  flex flex-col w-full h-[100vh]">
             <div className=" h-[25vh] sm:h-[40vh] w-full flex xl:justify-between justify-around gap-8">
-                <div className="xl:hidden block  font-bold">
-                    <Sheet>
-                        <SheetTrigger>
-                            <MenuIcon className="h-8 w-8" />
-                        </SheetTrigger>
-                        <SheetContent>
-                            <MobileSidebar />
-                        </SheetContent>
-                    </Sheet>
-                </div>
+
                 <div className="mt-20  md:w-[50vw] sm:block hidden">
                     <Input
                         placeholder="Search all Invoices ..."

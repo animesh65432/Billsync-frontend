@@ -1,6 +1,5 @@
 import { useStore } from "@/store"
-import { Home, FileText, Mail, Settings, LogOut, Plus, Sun, Moon } from "lucide-react"
-
+import { Home, LogOut, Plus, Sun, Moon } from "lucide-react"
 
 export default function DashboardSidebar() {
     const { onchangecolor, color } = useStore()
@@ -11,16 +10,7 @@ export default function DashboardSidebar() {
                     <Home />
                 </ul>
                 <ul>
-                    <FileText />
-                </ul>
-                <ul>
                     <Plus />
-                </ul>
-                <ul>
-                    <Mail />
-                </ul>
-                <ul>
-                    <Settings />
                 </ul>
                 <ul onClick={onchangecolor}>
                     {color ? <Sun /> : <Moon />}
