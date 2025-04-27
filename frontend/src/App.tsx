@@ -1,4 +1,4 @@
-import { Landingpage, Dashborad, Singup, Singin } from "@/pages"
+import { Landingpage, Dashborad, Singup, Singin, InvoiceFrom } from "@/pages"
 import { BrowserRouter, Route, Routes } from "react-router-dom"
 import { ToastContainer } from "react-toastify"
 import { ThemeColorProvider, MainLayout } from "@/components"
@@ -13,6 +13,11 @@ function App() {
           <Route path="/Dashborad" element={
             <MainLayout>
               <Dashborad />
+            </MainLayout>
+          }></Route>
+          <Route path="/create-invoice" element={
+            <MainLayout>
+              <InvoiceFrom />
             </MainLayout>
           }></Route>
         </Routes>
