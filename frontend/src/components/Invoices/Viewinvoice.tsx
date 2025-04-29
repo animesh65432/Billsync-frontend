@@ -7,17 +7,19 @@ import { Card, CardHeader, CardTitle, CardContent, CardFooter } from "@/componen
 import { Badge } from "@/components/ui/badge"
 import { CalendarIcon, CreditCardIcon, UserIcon, BellIcon } from "lucide-react"
 import { useNavigate } from "react-router-dom"
+import { useStore } from "@/store"
 
 export default function ViewInvoice() {
     const [invoice, setInvoice] = useState<InvoicesTypes>()
     const [loading, setLoading] = useState<boolean>(false)
     const { id } = useParams()
     const navigate = useNavigate()
+    const { token } = useStore()
 
     async function getInvoice() {
         setLoading(true)
         try {
-            const response = await GetInvoice(Number(id)) as InvoicesTypes
+            const response = await GetInvoice(Number(id), token) as InvoicesTypes
             setInvoice(response)
         }
         finally {

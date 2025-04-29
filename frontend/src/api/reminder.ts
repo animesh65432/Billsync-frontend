@@ -1,6 +1,6 @@
 import { Call } from "@/services/call"
 
-export const sentreminder = (Id: number) =>
+export const sentreminder = (Id: number, auth_token: string) =>
     Call({
         path: `/remider/sentreminder?Id=${Id}`, method: "POST",
         headers: {
