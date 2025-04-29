@@ -105,8 +105,10 @@ export default function Login() {
                         <Button className="bg-white text-black hover:bg-amber-50 w-[30%]" disabled={loading}>{loading ? <Icons.spinner className="animate-spin" /> : "Continue"}</Button>
                         <div>Don't have an account?<Link to="/singup"><span className="underline"> Signup</span></Link></div>
                     </div>
-                    <div className="w-[60%] m-auto">
-                        <GoogleLogin onSuccess={(data) => googlelogin(data)} />
+                    <div className="w-full flex justify-center ">
+                        <div>
+                            <GoogleLogin onSuccess={(data) => googlelogin(data)} />
+                        </div>
                     </div>
                 </form>
             </div>

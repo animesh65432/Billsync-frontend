@@ -108,8 +108,10 @@ export default function Singup() {
                         <Button className="bg-white text-black hover:bg-amber-50 w-[30%]" disabled={loading}>{loading ? <Icons.spinner className="animate-spin" /> : "Continue"}</Button>
                         <div>Already have an account?<Link to="/singin"><span className="underline"> Login</span></Link></div>
                     </div>
-                    <div className="w-[60%] m-auto">
-                        <GoogleLogin onSuccess={(data) => googlelogin(data)} />
+                    <div className="flex justify-center">
+                        <div>
+                            <GoogleLogin onSuccess={(data) => googlelogin(data)} />
+                        </div>
                     </div>
                 </form>
 
