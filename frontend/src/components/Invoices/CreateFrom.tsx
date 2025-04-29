@@ -22,7 +22,12 @@ import { Calendar } from "@/components/ui/calendar"
 import { Input } from "@/components/ui/input"
 import { CalendarIcon } from "lucide-react"
 import { format } from "date-fns"
-//
+import { create } from "@/api/Invoices"
+import { useState } from "react"
+import { Icons } from "@/Icon"
+import { toast } from "react-toastify"
+import { useNavigate } from "react-router-dom"
+
 
 type InvoiceCreateFormtype = z.infer<typeof InvoiceCreateForm>
 
@@ -30,10 +35,21 @@ export default function CreateFrom() {
     const form = useForm<InvoiceCreateFormtype>({
         resolver: zodResolver(InvoiceCreateForm)
     })
+    const [loading, setloading] = useState<boolean>(false)
+    const naviagte = useNavigate()
 
-    const onSubmit = (data: InvoiceCreateFormtype) => {
-        console.log(data)
+    const onSubmit = async (data: InvoiceCreateFormtype) => {
+        setloading(true)
+        try {
+            await create(data.clientName, data.amount, data.dueDate, data.Mail)
+            toast.success("sucessfully create invoice")
+            naviagte("/Dashborad")
+        }
+        finally {
+            setloading(false)
+        }
     }
+
     return (
         <div className=" h-full w-full flex justify-center items-center p-2 sm:mt-0 mt-20">
             <div className="w-full max-w-md rounded-lg   h-[80vh] ">
@@ -72,43 +88,36 @@ export default function CreateFrom() {
                             )}
                         />
                         <FormField
-
                             control={form.control}
                             name="dueDate"
                             render={({ field }) => (
                                 <FormItem className="flex flex-col text-black">
                                     <FormLabel>Due Date</FormLabel>
                                     <Popover>
-                                        <PopoverTrigger asChild>
-                                            <FormControl>
-                                                <Button
-                                                    variant="outline"
-                                                    className={cn(
-                                                        "w-full h-10 px-3 py-2 text-left font-normal bg-background border border-input rounded-md",
-                                                        !field.value && "text-muted-foreground"
-                                                    )}
-                                                >
-                                                    {field.value ? (
-                                                        format(new Date(field.value), "PPP")
-                                                    ) : (
-                                                        <span>Select a date</span>
-                                                    )}
-                                                    <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
-                                                </Button>
-                                            </FormControl>
+                                        <PopoverTrigger>
+                                            <Button
+                                                variant={"outline"}
+                                                className={cn(
+                                                    "w-full justify-start text-left font-normal",
+                                                    !field.value && "text-muted-foreground"
+                                                )}
+                                            >
+                                                {field.value ? format(field.value, "PPP") : <span>Pick a date</span>}
+                                                <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
+                                            </Button>
                                         </PopoverTrigger>
-                                        <PopoverContent className="w-auto p-0" align="start">
+                                        <PopoverContent className="w-auto p-0">
                                             <Calendar
                                                 mode="single"
+                                                selected={new Date(field.value)}
                                                 onSelect={field.onChange}
+                                                disabled={(date) => date < new Date()}
                                                 initialFocus
-                                                selected={field.value ? new Date(field.value) : undefined}
                                             />
                                         </PopoverContent>
                                     </Popover>
-                                    <FormDescription>
-                                        When payment is expected.
-                                    </FormDescription>
+
+                                    <FormDescription>When payment is expected.</FormDescription>
                                     <FormMessage />
                                 </FormItem>
                             )}
@@ -123,7 +132,8 @@ export default function CreateFrom() {
                                         <Input
                                             type="number"
                                             placeholder="0.00"
-                                            {...field}
+                                            value={field.value ?? ""}
+                                            onChange={(e) => field.onChange(Number(e.target.value))}
                                         />
                                     </FormControl>
                                     <FormDescription>
@@ -133,7 +143,7 @@ export default function CreateFrom() {
                                 </FormItem>
                             )}
                         />
-                        <Button type="submit" >Create Invoice</Button>
+                        <Button type="submit" disabled={loading} >{loading ? <Icons.spinner className="animate-spin h-4 w-4" /> : "Create Invoice"}</Button>
                     </form>
                 </Form>
             </div>

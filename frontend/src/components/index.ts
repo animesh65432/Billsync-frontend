@@ -9,7 +9,10 @@ import Login from "./auth/Login";
 import ThemeColorProvider from "./ThemeColorProvider";
 import MainLayout from "./MainLayout";
 import MobileSidebar from "./DashBorad/MobileSidebar";
-import Invoicefrom from "./InvoicesCreate/CreateFrom"
+import Invoicefrom from "./Invoices/CreateFrom"
+import Viewinvoice from "./Invoices/Viewinvoice";
+import UpdateInoice from "./Invoices/UpdateInvoice";
 
 
-export { Header, Sidebar, Dashboard, LoadinSpinner, InvoicesTable, Invoicescolumns, Signup, Login, ThemeColorProvider, MainLayout, MobileSidebar, Invoicefrom }
+export { Header, Sidebar, Dashboard, LoadinSpinner, InvoicesTable, Invoicescolumns, Signup, Login, ThemeColorProvider, MainLayout, MobileSidebar, Invoicefrom, Viewinvoice, UpdateInoice }
+

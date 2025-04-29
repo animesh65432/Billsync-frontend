@@ -5,10 +5,12 @@ import { z } from "zod";
 import { Button } from "@/components/ui/button"
 import { Link } from "react-router-dom"
 import { useNavigate } from "react-router-dom"
-import { uselogintheuser } from "@/api/Users"
+import { uselogintheuser, loginwithgoogle } from "@/api/Users"
 import { useState } from "react";
 import { Icons } from "@/Icon"
 import { toast } from "react-toastify"
+import { GoogleLogin, CredentialResponse } from '@react-oauth/google';
+import { useStore } from "@/store"
 
 type LoginTypes = z.infer<typeof LoginSchema>;
 
@@ -24,14 +26,16 @@ export default function Login() {
             Password: "testpassword",
         },
     });
-    const [loading, setloading] = useState<Boolean>(false)
+    const [loading, setloading] = useState<boolean>(false)
     const navigate = useNavigate()
+    const { addtoken } = useStore()
 
     const onSubmit = async (data: LoginTypes) => {
         setloading(true)
         try {
             const response = await uselogintheuser(data.email, data.Password) as { token: string, message: string };
             navigate("/Dashborad")
+            addtoken(response.token)
             toast.success(`${response.message}`)
         } catch (error) {
             console.log(error)
@@ -41,10 +45,28 @@ export default function Login() {
         }
     };
 
+    const googlelogin = async (data: CredentialResponse) => {
+        console.log(data)
+        if (!data.credential || !data.clientId) {
+            console.error('Missing Google credential or client ID');
+            return;
+        }
+        try {
+            const response = await loginwithgoogle(data.clientId, data.credential) as { token: string, message: string };
+            navigate("/Dashborad")
+            addtoken(response.token)
+            toast.success(`${response.message}`)
+        } catch (error) {
+            console.error(error);
+            toast.error("something went wrong")
+        }
+    };
+
+
     return (
         <div className="grid md:grid-cols-2 grid-cols-1 min-h-screen">
             <div className="bg-white text-black flex flex-col items-center justify-center px-6 py-12">
-                <div className="w-[60vw] h-[30vh] md:w-[60vw] md:h-[60vh] mb-8">
+                <div className="w-[60vw] h-[20vh] md:w-[60vw] md:h-[60vh] mb-8">
                     <img src="./signinpage.png" alt="Sign In" className="w-full h-full object-contain" />
                 </div>
                 <div className="text-center space-y-2  font-medium">
@@ -80,8 +102,11 @@ export default function Login() {
                         {errors.Password && <p className="text-red-500 text-sm mt-1">{errors.Password.message}</p>}
                     </div>
                     <div className=" w-full  justify-center flex flex-col items-center gap-4">
-                        <Button className="bg-white text-black hover:bg-amber-50 w-[30%]">{loading ? <Icons.spinner className="animate-spin" /> : "Continue"}</Button>
+                        <Button className="bg-white text-black hover:bg-amber-50 w-[30%]" disabled={loading}>{loading ? <Icons.spinner className="animate-spin" /> : "Continue"}</Button>
                         <div>Don't have an account?<Link to="/singup"><span className="underline"> Signup</span></Link></div>
+                    </div>
+                    <div className="w-[60%] m-auto">
+                        <GoogleLogin onSuccess={(data) => googlelogin(data)} />
                     </div>
                 </form>
             </div>

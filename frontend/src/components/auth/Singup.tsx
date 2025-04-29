@@ -4,10 +4,13 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { Button } from "@/components/ui/button"
 import { Link } from "react-router-dom"
-import { usesinguptheuser } from "@/api/Users"
+import { loginwithgoogle, usesinguptheuser } from "@/api/Users"
 import { useState } from "react";
 import { toast } from "react-toastify"
 import { Icons } from "@/Icon";
+import { GoogleLogin, CredentialResponse } from '@react-oauth/google';
+import { useStore } from "@/store"
+import { useNavigate } from "react-router-dom"
 
 type SingupTypes = z.infer<typeof SingupSchema>;
 
@@ -20,11 +23,14 @@ export default function Singup() {
         resolver: zodResolver(SingupSchema),
     });
     const [loading, setloading] = useState<boolean>(false)
+    const { addtoken } = useStore()
+    const navigate = useNavigate()
 
     const onSubmit = async (data: SingupTypes) => {
         setloading(true)
         try {
             const response = await usesinguptheuser(data.name, data.email, data.Password) as { message: string }
+            console.log(response)
             toast.success(`${response.message}`)
         } catch (error) {
             console.log(error)
@@ -33,11 +39,27 @@ export default function Singup() {
             setloading(false)
         }
     };
+    const googlelogin = async (data: CredentialResponse) => {
+        console.log(data)
+        if (!data.credential || !data.clientId) {
+            console.error('Missing Google credential or client ID');
+            return;
+        }
+        try {
+            const response = await loginwithgoogle(data.clientId, data.credential) as { token: string, message: string };
+            navigate("/Dashborad")
+            addtoken(response.token)
+            toast.success(`${response.message}`)
+        } catch (error) {
+            console.error(error);
+            toast.error("something went wrong")
+        }
+    };
 
     return (
         <div className="grid md:grid-cols-2 grid-cols-1 min-h-screen">
             <div className="bg-white text-black flex flex-col items-center justify-center px-6 py-12">
-                <div className="w-[60vw] h-[30vh] md:w-[60vw] md:h-[60vh] mb-8">
+                <div className="w-[60vw] h-[20vh] md:w-[60vw] md:h-[60vh] mb-8">
                     <img src="./signinpage.png" alt="Sign In" className="w-full h-full object-contain" />
                 </div>
                 <div className="text-center space-y-2  font-medium">
@@ -83,10 +105,14 @@ export default function Singup() {
                         {errors.Password && <p className="text-red-500 text-sm mt-1">{errors.Password.message}</p>}
                     </div>
                     <div className=" w-full  justify-center flex flex-col items-center gap-4">
-                        <Button className="bg-white text-black hover:bg-amber-50 w-[30%]">{loading ? <Icons.spinner className="animate-spin" /> : "Continue"}</Button>
+                        <Button className="bg-white text-black hover:bg-amber-50 w-[30%]" disabled={loading}>{loading ? <Icons.spinner className="animate-spin" /> : "Continue"}</Button>
                         <div>Already have an account?<Link to="/singin"><span className="underline"> Login</span></Link></div>
                     </div>
+                    <div className="w-[60%] m-auto">
+                        <GoogleLogin onSuccess={(data) => googlelogin(data)} />
+                    </div>
                 </form>
+
             </div>
         </div >
     );

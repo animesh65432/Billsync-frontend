@@ -3,7 +3,7 @@ import { Home, LogOut, Plus, Sun, Moon } from "lucide-react"
 import { useNavigate } from "react-router-dom"
 
 export default function DashboardSidebar() {
-    const { onchangecolor, color } = useStore()
+    const { onChangeColor, color, removetoken } = useStore()
     const naviagate = useNavigate()
     return (
         <>
@@ -14,10 +14,10 @@ export default function DashboardSidebar() {
                 <ul>
                     <Plus onClick={() => naviagate("/create-invoice")} />
                 </ul>
-                <ul onClick={onchangecolor}>
+                <ul onClick={onChangeColor}>
                     {color ? <Sun /> : <Moon />}
                 </ul>
-                <ul>
+                <ul onClick={() => removetoken()}>
                     <LogOut />
                 </ul>
             </div>

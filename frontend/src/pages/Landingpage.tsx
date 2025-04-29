@@ -1,11 +1,20 @@
 import { Button } from "@/components/ui/button"
 import { Icons } from "@/Icon"
 import { useNavigate } from "react-router-dom"
-
+import { useStore } from "@/store"
 export default function LandingPage() {
     let navigate = useNavigate();
+    const { token } = useStore()
+    const isLogin = !!token
     const naiviagate_to = () => {
-        navigate("/singin")
+        if (!isLogin) {
+            navigate("/singin")
+            return
+        }
+        else {
+            navigate("/Dashborad")
+            return
+        }
     }
     return (
         <div className="w-full min-h-screen bg-gradient-to-b from-black via-gray-900 to-black text-white font-mono flex flex-col items-center">

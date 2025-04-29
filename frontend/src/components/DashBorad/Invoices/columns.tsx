@@ -9,6 +9,12 @@ import {
 import { InvoicesTypes } from "@/types"
 import { Icons } from "@/Icon"
 import { useStore } from "@/store"
+import { Delete, markaspaid } from "@/api/Invoices"
+import { sentreminder } from "@/api/reminder"
+import { useState } from "react"
+import { toast } from "react-toastify"
+import { Link } from "react-router-dom"
+
 
 
 export const Invoicescolumns: ColumnDef<InvoicesTypes>[] = [
@@ -54,6 +60,7 @@ export const Invoicescolumns: ColumnDef<InvoicesTypes>[] = [
                     <DropdownMenuItem onClick={() => column.setFilterValue("PENDING")}>
                         PENDING
                     </DropdownMenuItem>
+
                     <DropdownMenuItem onClick={() => column.setFilterValue("SUCCEED")}>
                         SUCCEED
                     </DropdownMenuItem>
@@ -92,17 +99,62 @@ export const Invoicescolumns: ColumnDef<InvoicesTypes>[] = [
         },
     }, {
         id: "actions",
-        cell: () => {
+        cell: ({ row }) => {
+            const { deleteinvoice, makeinvoicePaidInvoice } = useStore()
+            const [reminderlodaing, sentreminderloading] = useState<boolean>(false)
+            const [deletInvoiceloading, setdeleteinvoiceloading] = useState<boolean>(false)
+            const [makepaidInvoiceloading, setmakepaidInvoiceloading] = useState<boolean>(false)
+            const sendRemider = async (id: number) => {
+                sentreminderloading(true)
+                try {
+                    await sentreminder(id)
+                    toast.success("Sucessfully sent it")
+                } finally {
+                    sentreminderloading(false)
+                }
+            }
+
+            const deletInvoice = async (id: number) => {
+                setdeleteinvoiceloading(true)
+                try {
+                    await Delete(id)
+                    toast.success("sucessfully delete it")
+                    deleteinvoice(id)
+                }
+                finally {
+                    sentreminderloading(false)
+                }
+            }
+
+            const makepaidInvoice = async (id: number) => {
+                setmakepaidInvoiceloading(true)
+                try {
+                    await markaspaid(id)
+                    toast.success("sucssfully update it")
+                    makeinvoicePaidInvoice(id)
+                } finally {
+                    setmakepaidInvoiceloading(false)
+                }
+            }
             return <DropdownMenu>
                 <DropdownMenuTrigger>
                     <span className="sr-only">Open menu</span>
                     <MoreHorizontal className="h-4 w-4" />
                 </DropdownMenuTrigger>
                 <DropdownMenuContent>
-                    <DropdownMenuItem>View</DropdownMenuItem>
-                    <DropdownMenuItem>Send Reminder</DropdownMenuItem>
-                    <DropdownMenuItem>Edit</DropdownMenuItem>
-                    <DropdownMenuItem>Delete</DropdownMenuItem>
+                    <Link to={`/view-invoice/${row.original.id}`}>
+                        <DropdownMenuItem>View</DropdownMenuItem>
+                    </Link>
+                    <DropdownMenuItem onClick={() => sendRemider(row.original.id)} disabled={reminderlodaing}>{reminderlodaing ? <Icons.spinner className="h-3 w-3" /> : "Send Reminder"}</DropdownMenuItem>
+                    <DropdownMenuItem onClick={() => makepaidInvoice(row.original.id)} disabled={makepaidInvoiceloading} >
+                        {makepaidInvoiceloading ? <Icons.spinner className="h-3 w-3" /> : " Mark as paid"}
+                    </DropdownMenuItem>
+                    <Link to={`/update-invoice/${row.original.id}`}>
+                        <DropdownMenuItem>Edit</DropdownMenuItem>
+                    </Link>
+                    <DropdownMenuItem onClick={() => deletInvoice(row.original.id)} disabled={deletInvoiceloading}>
+                        {deletInvoiceloading ? <Icons.spinner className="h-3 w-3" /> : "Delete"}
+                    </DropdownMenuItem>
                 </DropdownMenuContent>
             </DropdownMenu>
 
@@ -110,3 +162,7 @@ export const Invoicescolumns: ColumnDef<InvoicesTypes>[] = [
     }
 
 ]
+
+// function usestate<T>(arg0: boolean): [any, any] {
+//     throw new Error("Function not implemented.")
+// }

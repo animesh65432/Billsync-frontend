@@ -10,10 +10,8 @@ export default function Dashborad() {
     async function init() {
         setloading(true)
         try {
-            const Invoices = await GetInvoices("eyJhbGciOiJIUzI1NiJ9.dGVzdEBnbWFpbC5jb20.WW8_MBkcdmvtxP3yUkzbJa-rnsKeBX3IM0ncMdX1m_I") as InvoicesTypes[]
+            const Invoices = await GetInvoices() as InvoicesTypes[]
             setInvoiceStore(Invoices)
-        } catch (error) {
-            console.log(error)
         }
         finally {
             setloading(false)

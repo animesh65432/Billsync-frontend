@@ -21,3 +21,12 @@ export const uselogintheuser = (email: string, Password: string) => Call({
     }
 });
 
+export const loginwithgoogle = (
+    clientId: string, credential: string,) => Call({
+        path: "/users/google-auth",
+        method: "POST",
+        request: {
+            clientId,
+            credential
+        }
+    })

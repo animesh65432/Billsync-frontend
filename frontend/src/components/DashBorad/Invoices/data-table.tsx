@@ -1,5 +1,3 @@
-"use client"
-
 import { useState, type Dispatch, type SetStateAction, useEffect } from "react"
 import {
     type ColumnDef,
@@ -151,7 +149,7 @@ export default function InvoicesDataTable<TData, TValue>({
 
             {/* Responsive Pagination */}
             <div className="flex flex-col sm:flex-row items-center justify-between gap-2 py-2">
-                <div className={`text-center sm:text-left ${isDarkMode ? "text-white" : "text-black"}`}>
+                <div className={`text-center sm:text-left `}>
                     {windowWidth > 640 ? (
                         <>
                             Showing page {table.getState().pagination.pageIndex + 1} of {table.getPageCount() || 1}

@@ -1,5 +1,5 @@
 import { Label, Pie, PieChart, Tooltip } from "recharts";
-import { dummyInvoices } from "@/lib/utils";
+import { useStore } from "@/store";
 
 const chartConfig = {
     status: {
@@ -16,7 +16,8 @@ const chartConfig = {
 };
 
 const InvoiceChart = () => {
-    const statusCounts = dummyInvoices.reduce(
+    const { invoices } = useStore()
+    const statusCounts = invoices.reduce(
         (acc, invoice) => {
             if (invoice.status === "PENDING") acc.PENDING += 1;
             else if (invoice.status === "SUCCEED") acc.SUCCEED += 1;
@@ -24,11 +25,11 @@ const InvoiceChart = () => {
         },
         { PENDING: 0, SUCCEED: 0 }
     );
-    const PendingAmount = dummyInvoices.reduce(
+    const PendingAmount = invoices.reduce(
         (acc, cur) => cur.status === "PENDING" ? acc + cur.amount : acc,
         0
     );
-    const SucesseAmount = dummyInvoices.reduce(
+    const SucesseAmount = invoices.reduce(
         (acc, cur) => cur.status === "SUCCEED" ? acc + cur.amount : acc,
         0
     );
@@ -49,7 +50,7 @@ const InvoiceChart = () => {
     return (
         <div className="flex flex-col">
             <div className="items-center pb-0 flex justify-center font-bold">
-                <p>{dummyInvoices.length.toLocaleString()} Total Invoices</p>
+                <p>{invoices.length.toLocaleString()} Total Invoices</p>
             </div>
 
             <div >

@@ -4,5 +4,6 @@ export type InvoicesTypes = {
     amount: number,
     status: "PENDING" | "SUCCEED",
     dueDate: Date,
-    reminderSent: boolean
+    reminderSent: boolean,
+    Mail: string
 }
