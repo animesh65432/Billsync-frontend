@@ -27,6 +27,7 @@ import { useState } from "react"
 import { Icons } from "@/Icon"
 import { toast } from "react-toastify"
 import { useNavigate } from "react-router-dom"
+import { useStore } from "@/store"
 
 
 type InvoiceCreateFormtype = z.infer<typeof InvoiceCreateForm>
@@ -37,11 +38,12 @@ export default function CreateFrom() {
     })
     const [loading, setloading] = useState<boolean>(false)
     const naviagte = useNavigate()
+    const { token } = useStore()
 
     const onSubmit = async (data: InvoiceCreateFormtype) => {
         setloading(true)
         try {
-            await create(data.clientName, data.amount, data.dueDate, data.Mail)
+            await create(data.clientName, data.amount, data.dueDate, data.Mail, token)
             toast.success("sucessfully create invoice")
             naviagte("/Dashborad")
         }

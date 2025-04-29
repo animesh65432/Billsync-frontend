@@ -100,14 +100,14 @@ export const Invoicescolumns: ColumnDef<InvoicesTypes>[] = [
     }, {
         id: "actions",
         cell: ({ row }) => {
-            const { deleteinvoice, makeinvoicePaidInvoice } = useStore()
+            const { deleteinvoice, makeinvoicePaidInvoice, token } = useStore()
             const [reminderlodaing, sentreminderloading] = useState<boolean>(false)
             const [deletInvoiceloading, setdeleteinvoiceloading] = useState<boolean>(false)
             const [makepaidInvoiceloading, setmakepaidInvoiceloading] = useState<boolean>(false)
             const sendRemider = async (id: number) => {
                 sentreminderloading(true)
                 try {
-                    await sentreminder(id)
+                    await sentreminder(id, token)
                     toast.success("Sucessfully sent it")
                 } finally {
                     sentreminderloading(false)
@@ -117,7 +117,7 @@ export const Invoicescolumns: ColumnDef<InvoicesTypes>[] = [
             const deletInvoice = async (id: number) => {
                 setdeleteinvoiceloading(true)
                 try {
-                    await Delete(id)
+                    await Delete(id, token)
                     toast.success("sucessfully delete it")
                     deleteinvoice(id)
                 }
@@ -129,7 +129,7 @@ export const Invoicescolumns: ColumnDef<InvoicesTypes>[] = [
             const makepaidInvoice = async (id: number) => {
                 setmakepaidInvoiceloading(true)
                 try {
-                    await markaspaid(id)
+                    await markaspaid(id, token)
                     toast.success("sucssfully update it")
                     makeinvoicePaidInvoice(id)
                 } finally {

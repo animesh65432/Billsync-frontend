@@ -30,6 +30,7 @@ import { Icons } from "@/Icon"
 import { format } from "date-fns"
 import { toast } from "react-toastify"
 import { useNavigate } from "react-router-dom"
+import { useStore } from "@/store"
 
 type UpdateInvoiceTypes = z.infer<typeof UpdateInvoiceSchema>;
 
@@ -39,6 +40,7 @@ export default function UpdateInvoice() {
     const [updateInvoiceLoading, setUpdateInvoiceLoading] = useState<boolean>(false)
     const [invoiceLoading, setInvoiceLoading] = useState<boolean>(false)
     const naivigate = useNavigate()
+    const { token } = useStore()
     const form = useForm({
         resolver: zodResolver(UpdateInvoiceSchema),
         defaultValues: {
@@ -52,7 +54,7 @@ export default function UpdateInvoice() {
     async function getInvoice() {
         setInvoiceLoading(true)
         try {
-            const response = await GetInvoice(invoiceid) as InvoicesTypes
+            const response = await GetInvoice(invoiceid, token) as InvoicesTypes
             form.reset({
                 clientName: response.clientName || "",
                 Mail: response.Mail || "",
@@ -71,7 +73,7 @@ export default function UpdateInvoice() {
     const onSubmit = async (data: UpdateInvoiceTypes) => {
         setUpdateInvoiceLoading(true)
         try {
-            await update(invoiceid, data.clientName, data.amount, data.dueDate, data.Mail)
+            await update(invoiceid, data.clientName, data.amount, data.dueDate, data.Mail, token)
             toast.success("sucessfully update it")
             naivigate("/Dashborad")
         } catch (error) {

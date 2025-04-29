@@ -5,12 +5,12 @@ import { InvoicesTypes } from "@/types/index"
 import { useStore } from "@/store"
 export default function Dashborad() {
     const [loading, setloading] = useState<boolean>(false)
-    const { setInvoiceStore } = useStore()
+    const { setInvoiceStore, token } = useStore()
 
     async function init() {
         setloading(true)
         try {
-            const Invoices = await GetInvoices() as InvoicesTypes[]
+            const Invoices = await GetInvoices(token) as InvoicesTypes[]
             setInvoiceStore(Invoices)
         }
         finally {

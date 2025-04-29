@@ -4,12 +4,13 @@ import { ToastContainer } from "react-toastify"
 import { GoogleOAuthProvider } from '@react-oauth/google';
 import { ThemeColorProvider, MainLayout } from "@/components"
 import { useStore } from "@/store"
+import config from "./config";
 function App() {
   const { token } = useStore()
   const isLogin = !!token
   return (
     <ThemeColorProvider>
-      <GoogleOAuthProvider clientId="971564642749-kob8boemlh2paosvq95ko2cc1mcplce7.apps.googleusercontent.com">
+      <GoogleOAuthProvider clientId={config.GOOGLE_CLIENT_ID}>
         <BrowserRouter>
           <Routes>
             <Route path="/" element={<Landingpage />} />
