@@ -46,7 +46,7 @@ export default function Login() {
     };
 
     const googlelogin = async (data: CredentialResponse) => {
-        console.log(data)
+        setloading(true)
         if (!data.credential || !data.clientId) {
             console.error('Missing Google credential or client ID');
             return;
@@ -59,6 +59,7 @@ export default function Login() {
         } catch (error) {
             console.error(error);
             toast.error("something went wrong")
+            setloading(false)
         }
     };
 

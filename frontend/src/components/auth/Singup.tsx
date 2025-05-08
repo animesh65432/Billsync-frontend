@@ -40,7 +40,7 @@ export default function Singup() {
         }
     };
     const googlelogin = async (data: CredentialResponse) => {
-        console.log(data)
+        setloading(true)
         if (!data.credential || !data.clientId) {
             console.error('Missing Google credential or client ID');
             return;
@@ -53,6 +53,7 @@ export default function Singup() {
         } catch (error) {
             console.error(error);
             toast.error("something went wrong")
+            setloading(false)
         }
     };
 
